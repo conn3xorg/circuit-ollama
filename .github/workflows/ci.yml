@@ -35,6 +35,11 @@ jobs:
       - name: Validate the example
         working-directory: examples/local
         run: conn3x init -backend=false && conn3x validate
+      # Validating needs no DigitalOcean token; applying it costs money, so
+      # CI doesn't.
+      - name: Validate the DigitalOcean example
+        working-directory: examples/digitalocean
+        run: conn3x init -backend=false && conn3x validate
 
   e2e:
     needs: validate
