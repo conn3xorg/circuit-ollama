@@ -88,14 +88,16 @@ jobs:
           EOF
       # Changing the drop-in must restart Ollama with the new setting, which
       # needs systemd to reload first.
-      - name: Change the environment, then check the running process has it
+      - name: Change the environment, then check Ollama restarted with it
         working-directory: examples/local
         run: |
           conn3x apply -auto-approve -var keep_alive=20m
           conn3x plan -detailed-exitcode -var keep_alive=20m
           sudo podman exec -i circuit-ollama sh -eu <<'EOF'
-          pid=$(systemctl show ollama -p MainPID --value)
-          tr '\0' '\n' < "/proc/$pid/environ" | grep -qx OLLAMA_KEEP_ALIVE=20m
+          systemctl show ollama -p Environment | grep -q OLLAMA_KEEP_ALIVE=20m
+          test "$(systemctl show ollama -p NeedDaemonReload --value)" = no
+          started=$(date -d "$(systemctl show ollama -p ExecMainStartTimestamp --value)" +%s)
+          test "$started" -ge "$(stat -c %Y /etc/systemd/system/ollama.service.d/conn3x.conf)"
           EOF
       - name: Clean up
         if: always()
