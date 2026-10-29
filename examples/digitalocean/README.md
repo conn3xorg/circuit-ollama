@@ -39,7 +39,7 @@ It also leaves `log_martians` to ufw. circuit-hardening turns it on, but ufw tur
 
 ## Before you start
 
-- Conn3x v0.6.5 or later.
+- Conn3x v0.6.7 or later, which circuit-ollama v0.1.1 needs.
 - A DigitalOcean [personal access token](https://docs.digitalocean.com/reference/api/create-personal-access-token/) with write access.
 - An SSH key pair, `~/.ssh/id_ed25519` and `~/.ssh/id_ed25519.pub` by default.
 - `curl` and `jq` for [Try it](#try-it).
