@@ -29,7 +29,7 @@ On the host, try it with `ollama run qwen2.5:0.5b`, or through the API:
 curl http://127.0.0.1:11434/api/generate -d '{"model": "qwen2.5:0.5b", "prompt": "Why is the sky blue?", "stream": false}'
 ```
 
-To try it on a throwaway container first, see [examples/local](examples/local).
+To try it on a throwaway container first, see [examples/local](examples/local). For a droplet with Ollama, Qdrant and nothing open but SSH, built and configured in one apply, see [examples/digitalocean](examples/digitalocean).
 
 ### Reaching it from other machines
 
