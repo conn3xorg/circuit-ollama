@@ -160,7 +160,7 @@ module "firewall" {
 }
 
 module "ollama" {
-  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.1"
 
   hosts                = local.hosts
   ssh_private_key_file = var.ssh_private_key_file
