@@ -86,6 +86,17 @@ jobs:
             -d '{"model": "smollm2:135m", "prompt": "Say hello.", "stream": false}' |
             grep '"response":"[^"]'
           EOF
+      # Changing the drop-in must restart Ollama with the new setting, which
+      # needs systemd to reload first.
+      - name: Change the environment, then check the running process has it
+        working-directory: examples/local
+        run: |
+          conn3x apply -auto-approve -var keep_alive=20m
+          conn3x plan -detailed-exitcode -var keep_alive=20m
+          sudo podman exec -i circuit-ollama sh -eu <<'EOF'
+          pid=$(systemctl show ollama -p MainPID --value)
+          tr '\0' '\n' < "/proc/$pid/environ" | grep -qx OLLAMA_KEEP_ALIVE=20m
+          EOF
       - name: Clean up
         if: always()
         working-directory: examples/local

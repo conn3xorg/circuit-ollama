@@ -137,19 +137,6 @@ circuit "ollama" {
     notify = [handler.restart]
   }
 
-  # The restart handler doesn't reload systemd, and the service step below
-  # only does when it planned a change, so a changed unit or drop-in would
-  # otherwise restart with the old settings.
-  step "reload" {
-    command {
-      command = "systemctl daemon-reload"
-      triggers = {
-        unit        = conn3x_file.ollama__unit[each.key].revision
-        environment = conn3x_file.ollama__environment[each.key].revision
-      }
-    }
-  }
-
   step "running" {
     service {
       name    = "ollama"
