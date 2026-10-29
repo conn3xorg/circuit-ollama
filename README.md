@@ -90,7 +90,7 @@ Change `ollama_version` and `checksums` together. The checksums are in the relea
 
 ## Requirements
 
-Requires Conn3x v0.6.6 or later, systemd on each host, an x86_64 or aarch64 CPU, and outbound HTTPS to github.com and to ollama.com for models. Give the host enough memory for the models you pull: a 0.5B model runs in well under 1 GB, an 8B one wants about 8 GB.
+Requires Conn3x v0.6.7 or later, systemd on each host, an x86_64 or aarch64 CPU, and outbound HTTPS to github.com and to ollama.com for models. Give the host enough memory for the models you pull: a 0.5B model runs in well under 1 GB, an 8B one wants about 8 GB.
 
 ## Tested on
 

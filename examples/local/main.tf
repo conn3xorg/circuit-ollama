@@ -3,6 +3,11 @@ variable "port" {
   default = 2222
 }
 
+variable "keep_alive" {
+  type    = string
+  default = "10m"
+}
+
 module "ollama" {
   source = "../.."
 
@@ -15,7 +20,7 @@ module "ollama" {
   models = ["smollm2:135m"]
 
   environment = {
-    OLLAMA_KEEP_ALIVE = "10m"
+    OLLAMA_KEEP_ALIVE = var.keep_alive
   }
 }
 
