@@ -1,5 +1,7 @@
 # circuit-ollama
 
+[![Conn3x grade](https://conn3x.org/circuits/ollama/grade.svg)](https://conn3x.org/circuits/ollama/grade)
+
 A Conn3x circuit that runs [Ollama](https://ollama.com) on your own hosts, so you can ask a local model something without sending it to anyone's API. You pick the release and the models; the circuit installs Ollama from its official release tarball, runs it under systemd as its own `ollama` user, and pulls the models you list. The same settings land on Ubuntu, Debian, Fedora and Rocky Linux.
 
 It runs models on the CPU. That's plenty for small models and embeddings, and slow for big ones. GPU drivers aren't covered: see [What it doesn't do](#what-it-doesnt-do).
