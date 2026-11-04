@@ -128,7 +128,7 @@ locals {
 # facts whenever an earlier circuit has a change, and that makes Ollama
 # and Qdrant plan to download their releases again.
 module "baseline" {
-  source = "github.com/conn3xorg/circuit-baseline?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-baseline?ref=v0.1.1"
 
   hosts                = local.hosts
   ssh_private_key_file = var.ssh_private_key_file
@@ -153,7 +153,7 @@ module "hardening" {
 }
 
 module "firewall" {
-  source = "github.com/conn3xorg/circuit-firewall?ref=v0.2.0"
+  source = "github.com/conn3xorg/circuit-firewall?ref=v0.2.1"
 
   hosts                = local.hosts
   ssh_private_key_file = var.ssh_private_key_file
