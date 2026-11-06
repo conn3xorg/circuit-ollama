@@ -169,7 +169,7 @@ module "ollama" {
 }
 
 module "qdrant" {
-  source = "github.com/conn3xorg/circuit-qdrant?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-qdrant?ref=v0.1.2"
 
   hosts                = local.hosts
   ssh_private_key_file = var.ssh_private_key_file
