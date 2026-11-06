@@ -61,15 +61,31 @@ jobs:
           path: conn3x
           persist-credentials: false
           sparse-checkout: test/images
+      # circuit-hardening sets UMASK 027 in /etc/login.defs, which once left
+      # Ollama's directories closed to the ollama user. The Circuit Builder
+      # offers the two together, so every run hardens the host first, with
+      # hardening's own example on its privileged host.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: conn3xorg/circuit-hardening
+          ref: v0.3.0
+          path: hardening
+          persist-credentials: false
       - name: Install Conn3x
         env: *gh
         run: *install
-      - name: Start the ${{ matrix.distro }} host
-        working-directory: examples/local
+      - name: Start the ${{ matrix.distro }} host and harden it
+        working-directory: hardening/examples/local
         env:
           CONTAINERFILE: ${{ github.workspace }}/conn3x/test/images/${{ matrix.distro }}/Containerfile
+          CONTAINER_NAME: circuit-ollama
           PODMAN: sudo podman
-        run: ./up.sh
+        run: |
+          ./up.sh
+          conn3x init
+          conn3x apply -auto-approve
+          sudo podman exec circuit-ollama grep -qx 'UMASK 027' /etc/login.defs
+          cp id_ed25519 id_ed25519.pub known_hosts "$GITHUB_WORKSPACE/examples/local/"
       - name: Apply, then plan again with no changes
         working-directory: examples/local
         run: |
