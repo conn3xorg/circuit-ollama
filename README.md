@@ -10,7 +10,7 @@ It runs models on the CPU. That's plenty for small models and embeddings, and sl
 
 ```hcl
 module "ollama" {
-  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.2"
+  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.3"
 
   hosts                = { llm1 = "203.0.113.20" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
