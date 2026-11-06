@@ -10,7 +10,7 @@ It runs models on the CPU. That's plenty for small models and embeddings, and sl
 
 ```hcl
 module "ollama" {
-  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.3"
+  source = "github.com/conn3xorg/circuit-ollama?ref=v0.1.4"
 
   hosts                = { llm1 = "203.0.113.20" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -96,7 +96,7 @@ Requires Conn3x v0.6.7 or later, systemd on each host, an x86_64 or aarch64 CPU,
 
 ## Tested on
 
-Rocky Linux 10, Fedora 45, Ubuntu 24.04 and Debian 13. CI applies [examples/local](examples/local) to each on amd64, checks that the second plan has no changes and that the extra environment reached the service, and asks `smollm2:135m` for a reply through `/api/generate`. The same checks passed by hand on arm64 containers of all four. On Rocky Linux 10, changing `listen_address` and adding a model in one apply restarted Ollama on the new address before pulling.
+Rocky Linux 10, Fedora 45, Ubuntu 24.04 and Debian 13. CI applies [examples/local](examples/local) to each on amd64, checks that the second plan has no changes and that the extra environment reached the service, and asks `smollm2:135m` for a reply through `/api/generate`. After the container restarts, Ollama keeps its environment, the model answers again and the plan has no changes. The same checks passed by hand on arm64 containers of all four. On Rocky Linux 10, changing `listen_address` and adding a model in one apply restarted Ollama on the new address before pulling.
 
 It was also applied by hand to an Ubuntu 24.04 droplet and a Rocky Linux 10 droplet with SELinux enforcing, both with 2 vCPUs and 4 GB of memory. On both, `smollm2:135m` answered through the API, and after a reboot Ollama came back, answered again, and the plan had no changes. The Rocky Linux audit log had no SELinux denials. With `listen_address = "0.0.0.0:11434"`, both served the API to the internet, as warned above.
 
