@@ -115,6 +115,21 @@ jobs:
           started=$(date -d "$(systemctl show ollama -p ExecMainStartTimestamp --value)" +%s)
           test "$started" -ge "$(stat -c %Y /etc/systemd/system/ollama.service.d/conn3x.conf)"
           EOF
+      # Restarting the container boots systemd again, so this checks Ollama
+      # is enabled, keeps its setting and still has the model on disk.
+      - name: Restart the host, then check the model still answers
+        working-directory: examples/local
+        run: |
+          sudo podman restart circuit-ollama
+          sudo podman exec circuit-ollama timeout 60 systemctl is-system-running --wait || true
+          sudo podman exec -i circuit-ollama sh -eu <<'EOF'
+          for _ in $(seq 30); do curl -sf http://127.0.0.1:11434/api/version >/dev/null && break; sleep 1; done
+          systemctl show ollama -p Environment | grep -q OLLAMA_KEEP_ALIVE=20m
+          curl -sSf http://127.0.0.1:11434/api/generate \
+            -d '{"model": "smollm2:135m", "prompt": "Say hello.", "stream": false}' |
+            grep '"response":"[^"]'
+          EOF
+          conn3x plan -detailed-exitcode -var keep_alive=20m
       - name: Clean up
         if: always()
         working-directory: examples/local
