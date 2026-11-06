@@ -82,6 +82,18 @@ circuit "ollama" {
     }
   }
 
+  # The release tarball has no entries for bin, lib or lib/ollama, so tar
+  # makes them with the login session's umask, as mkdir does /opt/ollama.
+  # Under a umask such as circuit-hardening's 027, the ollama user couldn't
+  # reach its own binary.
+  step "directories" {
+    for_each = toset(["/opt/ollama", local.home, "${local.home}/bin", "${local.home}/lib", "${local.home}/lib/ollama"])
+    directory {
+      path = item.value
+      mode = "0755"
+    }
+  }
+
   step "download" {
     download {
       url    = "https://github.com/ollama/ollama/releases/download/v${var.ollama_version}/ollama-linux-${local.arch[each.key]}.tar.zst"
